@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Http\Controllers\Setting\ProductionController;
+use App\Http\Middleware\XssSanitizer;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
@@ -18,6 +20,7 @@ class RouteServiceProvider extends ServiceProvider
      * @var string
      */
     public const HOME = '/home';
+    private const API_BASE_PATH = 'routes/api';
 
     /**
      * The controller namespace for the application.
@@ -38,15 +41,29 @@ class RouteServiceProvider extends ServiceProvider
         $this->configureRateLimiting();
 
         $this->routes(function () {
-            Route::prefix('api')
-                ->middleware('api')
-                ->namespace($this->namespace)
-                ->group(base_path('routes/api.php'));
-
-            Route::middleware('web')
-                ->namespace($this->namespace)
-                ->group(base_path('routes/web.php'));
+            $this->mapApiRoutes();
+            $this->mapWebRoutes();
         });
+    }
+
+    protected function mapWebRoutes()
+    {
+        Route::middleware(['web'])
+            ->namespace($this->namespace)
+            ->group(base_path('routes/web.php'));
+    }
+
+    protected function mapApiRoutes()
+    {
+        $basePath = base_path(self::API_BASE_PATH);
+
+        Route::prefix('api')
+            ->middleware(['auth:api'])
+            ->namespace($this->namespace)
+            ->group(function () use ($basePath) {
+                Route::prefix('todos')
+                    ->group("$basePath/todos/todos.php");
+            });
     }
 
     /**

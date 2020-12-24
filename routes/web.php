@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\Auth\RegisterController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -12,6 +15,12 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::prefix('auth')->group(function () {
+    Route::post('register', [RegisterController::class, 'index']);
+    Route::post('login', [LoginController::class, 'index']);
+    Route::post('logout', [LogoutController::class, 'index'])->middleware('auth');
+});
 
 Route::get('/', function () {
     return view('index');
