@@ -23,3 +23,7 @@ phpunit.xml
 .idea/
 
 public/js/app.js
+
+public/0.js
+
+public/1.js
