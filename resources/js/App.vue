@@ -14,12 +14,14 @@
                             class="text-center"
                             cols="12"
                         >
-                            <h1 class="display-1 font-weight-thin mb-4">
-                                Todoful
-                            </h1>
-                            <h4 class="subheading">
-                                Do what you have to do today, <br> so every day you live your life with fullest!
-                            </h4>
+                            <div class="brown lighten-2">
+                                <h1 class="display-1 font-weight-thin mb-4">
+                                    Todoful
+                                </h1>
+                                <h4 class="subheading">
+                                    Do what you have to do today, <br> so every day you live your life with fullest!
+                                </h4>
+                            </div>
                         </v-col>
                     </v-row>
                     <v-row
