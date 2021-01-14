@@ -1,19 +1,15 @@
 <template>
     <div>
-        <v-dialog
-            v-model="isLogin"
-            max-width="50%"
-            persistent
-        >
+        <v-dialog v-model="isLogin"
+                  max-width="50%"
+                  persistent>
             <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                    class="white--text"
-                    color="brown darken-4"
-                    v-bind="attrs"
-                    v-on="on"
-                    depressed
-                    block
-                >Login
+                <v-btn class="white--text" color="brown darken-4"
+                       v-bind="attrs"
+                       v-on="on"
+                       depressed
+                       block>
+                    Login
                 </v-btn>
             </template>
             <v-card>
@@ -22,65 +18,44 @@
                         <v-col cols="10">
                             <span class="headline">Login</span>
                         </v-col>
-                        <v-col cols="2">
-                            <v-btn class="ma-2" text icon @click="isLogin = false">
+                        <v-col class="text-right" cols="2">
+                            <v-btn class="ma-2" text icon @click="closeForm">
                                 <v-icon>mdi-close</v-icon>
                             </v-btn>
                         </v-col>
                     </v-row>
                 </v-card-title>
                 <v-card-text>
-                    <validation-observer
-                        ref="loginForm"
-                        v-slot="{ invalid }"
-                    >
+                    <validation-observer ref="loginForm" v-slot="{ invalid }">
                         <form @submit.prevent="submitLoginForm">
-                            <validation-provider
-                                v-slot="{ errors }"
-                                name="email"
-                                rules="required|email"
-                            >
+                            <validation-provider v-slot="{ errors }"
+                                                 name="email"
+                                                 rules="required|email">
                                 <v-text-field
                                     v-model="email"
                                     :error-messages="errors"
                                     label="E-mail"
                                     type="email"
-                                    required
-                                ></v-text-field>
+                                    required>
+                                </v-text-field>
                             </validation-provider>
 
-                            <validation-provider
-                                v-slot="{ errors }"
-                                name="password"
-                                rules="required"
-                            >
-                                <v-text-field
-                                    v-model="password"
-                                    :error-messages="errors"
-                                    label="Password"
-                                    type="password"
-                                    required
-                                ></v-text-field>
+                            <validation-provider v-slot="{ errors }"
+                                                 name="password"
+                                                 rules="required">
+                                <v-text-field v-model="password"
+                                              :error-messages="errors"
+                                              label="Password"
+                                              type="password"
+                                              required>
+                                </v-text-field>
                             </validation-provider>
 
                             <v-row>
-                                <v-col cols="6">
-                                    <v-btn
-                                        color="red"
-                                        text
-                                        block
-                                        @click="closeDialog"
-                                    >
-                                        Cancel
-                                    </v-btn>
-                                </v-col>
-                                <v-col cols="6">
-                                    <v-btn
-                                        class="mr-4"
-                                        type="submit"
-                                        block
-                                        :disabled="invalid"
-                                    >
+                                <v-col cols="12">
+                                    <v-btn class="mr-4"
+                                           type="submit"
+                                           block>
                                         Login
                                     </v-btn>
                                 </v-col>
@@ -132,7 +107,7 @@ export default {
         clearForm() {
             this.email = this.password = '';
         },
-        closeDialog() {
+        closeForm() {
             this.clearForm();
             this.isLogin = false;
             this.$refs.loginForm.reset();
@@ -142,11 +117,13 @@ export default {
                 email: this.email,
                 password: this.password
             }
+
             axios.post('/auth/login', loginRequestData).then((success) => {
-                console.log(success);
+                alert("Login Success");
+                window.location.reload();
             }).catch((error) => {
-                console.log(error);
-            })
+                alert("Login Failed");
+            });
         },
         submitLoginForm() {
             this.$refs.loginForm.validate().then(success => {
@@ -154,9 +131,7 @@ export default {
                     this.login();
 
                     this.$nextTick(() => {
-                        this.clearForm();
-                        this.$refs.loginForm.reset();
-                        this.isLogin = false;
+                        this.closeForm();
                     });
                 } else {
                     alert('Username and/or Password is incorrect.')
