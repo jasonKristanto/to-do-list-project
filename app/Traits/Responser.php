@@ -4,16 +4,16 @@ namespace App\Traits;
 
 trait Responser
 {
-    protected function successResponse($data, $message = 'Success', $code = 200)
+    protected function successResponse($message = 'Success', $data = null)
     {
         return response()->json([
             'status'=> 1,
             'message' => $message,
             'data' => $data
-        ], $code);
+        ]);
     }
 
-    protected function errorResponse($code, $message = 'Failed')
+    protected function errorResponse($message = 'Failed', $code = 400)
     {
         return response()->json([
             'status'=> 2,

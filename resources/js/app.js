@@ -4,11 +4,16 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-import App from './App.vue'
-import Vue from 'vue'
-import vuetify from './plugins/vuetify'
+import App from './App.vue';
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import vuetify from './plugins/vuetify';
 
-window.Vue = require('vue')
+import router from './router';
+
+window.Vue = require('vue');
+
+Vue.use(VueRouter);
 
 /**
  * The following block of code may be used to automatically register your
@@ -29,6 +34,7 @@ window.Vue = require('vue')
 
 const app = new Vue({
     el: '#app',
+    router,
     vuetify,
     render: h => h(App)
 });

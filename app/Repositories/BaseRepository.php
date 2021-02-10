@@ -51,4 +51,62 @@ abstract class BaseRepository implements BaseRepositoryInterface
     {
         return $model->delete();
     }
+
+    public function getAttributesData(array $where, array $attributes = [])
+    {
+        return $this->model->where($where)->get($attributes);
+    }
+
+    public function findByAttributes(array $attributes)
+    {
+        $query = $this->buildQueryByAttributes($attributes);
+        return $query->first();
+    }
+
+    public function getByAttributes(array $attributes)
+    {
+        $query = $this->buildQueryByAttributes($attributes);
+        return $query->get();
+    }
+
+    public function findMany(array $ids)
+    {
+        $query = $this->model->query();
+        return $query->whereIn('id', $ids)->get();
+    }
+
+    public function updateByAttributes(array $attributes, array $data)
+    {
+        return $this->buildQueryByAttributes($attributes)->limit(1)->update($data);
+    }
+
+    public function updateManyByAttributes(array $attributes, array $data)
+    {
+        return $this->buildQueryByAttributes($attributes)->update($data);
+    }
+
+    public function destroyByAttributes(array $attributes)
+    {
+        return $this->buildQueryByAttributes($attributes)->delete();
+    }
+
+    public function clearCache()
+    {
+        return true;
+    }
+
+    public function buildQueryByAttributes(array $attributes, $orderBy = null, $sortOrder = 'desc')
+    {
+        $query = $this->model->query();
+
+        foreach ($attributes as $field => $value) {
+            $query = $query->where($field, $value);
+        }
+
+        if (null !== $orderBy) {
+            $query->orderBy($orderBy, $sortOrder);
+        }
+
+        return $query;
+    }
 }

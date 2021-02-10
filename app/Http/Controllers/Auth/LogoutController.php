@@ -17,8 +17,6 @@ class LogoutController extends Controller
         session()->invalidate();
         session()->regenerateToken();
 
-        return $this->successResponse([
-            'logout-status' => 'successful'
-        ]);
+        return $this->successResponse('Logout Successful');
     }
 }

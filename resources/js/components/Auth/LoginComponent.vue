@@ -119,9 +119,9 @@ export default {
             }
 
             axios.post('/auth/login', loginRequestData).then((success) => {
-                alert("Login Success");
-                window.location.reload();
+                this.$router.push('/todoist');
             }).catch((error) => {
+                console.log(error.response);
                 alert("Login Failed");
             });
         },

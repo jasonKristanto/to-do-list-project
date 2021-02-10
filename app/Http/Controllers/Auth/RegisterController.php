@@ -26,8 +26,6 @@ class RegisterController extends Controller
             'password' => bcrypt($userRegistrationRequest->password)
         ]);
 
-        return $this->successResponse([
-            'register-status' => 'successful'
-        ]);
+        return $this->successResponse('Register Successful');
     }
 }
