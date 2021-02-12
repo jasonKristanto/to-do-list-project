@@ -22,6 +22,7 @@ Route::prefix('auth')->group(function () {
     Route::post('logout', [LogoutController::class, 'index'])->middleware('auth');
 });
 
-Route::get('/', function () {
-    return view('index');
-});
+Route::any('/{any}', function () {
+    return view('app');
+})->where('any', '^(?!login|!logout|!register)$');
+

@@ -4,7 +4,7 @@ namespace App\Repositories\Todos\Lists;
 
 use App\Repositories\BaseRepository;
 
-class TodoListRepository extends BaseRepository implements TodoListRepositoryInterface
+class TodoistRepository extends BaseRepository implements TodoistRepositoryInterface
 {
 
 }

@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Todos\TodosTitleController;
+use App\Http\Controllers\Todos\TodoistController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,4 +14,4 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/title', [TodosTitleController::class, 'index']);
+Route::post('/', [TodoistController::class, 'index']);

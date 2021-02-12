@@ -8,7 +8,7 @@
                             <v-row align="center" justify="center">
                                 <v-col class="text-center" cols="12">
                                     <h1 class="display-1 font-weight-thin mb-4">
-                                        My To-Do Lists
+                                        Todoists
                                     </h1>
                                     <h4 class="subheading">
                                         Let's do all your to-do lists today to live life the fullest!
@@ -21,14 +21,6 @@
                                 </v-col>
                                 <v-col cols="6">
                                     <register-component></register-component>
-                                </v-col>
-                            </v-row>
-                            <v-row>
-                                <v-col cols="6">
-                                    <v-btn block @click="getTodosTitle">GET TODOS</v-btn>
-                                </v-col>
-                                <v-col cols="6">
-                                    <v-btn block @click="logout">LOGOUT</v-btn>
                                 </v-col>
                             </v-row>
                         </div>
@@ -52,44 +44,6 @@ export default {
         LoginComponent,
         RegisterComponent,
     },
-    methods: {
-        logout: function () {
-            var config = {
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                }
-            };
-
-            var axios = require('axios');
-            axios.defaults.headers.post['X-CSRF-Token'] = document.querySelector('meta[name="csrf-token"]').content;
-
-            axios.post('auth/logout', '', config).then(response => {
-                console.log(response.data);
-                this.posts = response.data.data;
-                location.reload();
-            }).catch(error => {
-                console.log(error.response);
-            })
-        },
-        getTodosTitle: function () {
-            var config = {
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                },
-            };
-
-            var axios = require('axios');
-            axios.defaults.headers.post['X-CSRF-Token'] = document.querySelector('meta[name="csrf-token"]').content;
-
-            axios.get('api/todos/title', config).then(response => {
-                console.log(response.data);
-            }).catch(error => {
-                console.log(error.response);
-            });
-        },
-    }
 }
 </script>
 

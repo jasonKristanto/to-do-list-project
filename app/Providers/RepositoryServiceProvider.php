@@ -5,10 +5,10 @@ namespace App\Providers;
 use App\Models\Todolist;
 use App\Models\TodolistTitle;
 use App\Models\User;
-use App\Repositories\Todos\Lists\TodoListRepository;
-use App\Repositories\Todos\Lists\TodoListRepositoryInterface;
-use App\Repositories\Todos\Title\TodolistTitleRepository;
-use App\Repositories\Todos\Title\TodolistTitleRepositoryInterface;
+use App\Repositories\Todos\Lists\TodoistRepository;
+use App\Repositories\Todos\Lists\TodoistRepositoryInterface;
+use App\Repositories\Todos\Title\TodoistTitleRepository;
+use App\Repositories\Todos\Title\TodoistTitleRepositoryInterface;
 use App\Repositories\User\UserRepository;
 use App\Repositories\User\UserRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
@@ -41,12 +41,12 @@ class RepositoryServiceProvider extends ServiceProvider
             return new UserRepository(new User());
         });
 
-        $this->app->bind(TodolistTitleRepositoryInterface::class, function () {
-            return new TodolistTitleRepository(new TodolistTitle());
+        $this->app->bind(TodoistTitleRepositoryInterface::class, function () {
+            return new TodoistTitleRepository(new TodolistTitle());
         });
 
-        $this->app->bind(TodoListRepositoryInterface::class, function () {
-            return new TodoListRepository(new Todolist());
+        $this->app->bind(TodoistRepositoryInterface::class, function () {
+            return new TodoistRepository(new Todolist());
         });
     }
 }

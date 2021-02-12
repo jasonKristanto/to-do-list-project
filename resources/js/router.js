@@ -1,17 +1,29 @@
 import VueRouter from 'vue-router';
 import TodoistIndexComponent from './components/Todoist/IndexComponent';
 import AuthIndexComponent from './components/Auth/IndexComponent';
+import NewTodoistComponent from './components/Todoist/NewTodoistComponent';
+import TodoistComponent from './components/Todoist/TodoistComponent';
 
 const routes = [
     {
         path: '/',
         name: 'Auth',
-        component: AuthIndexComponent
+        component: AuthIndexComponent,
     },
     {
-        path: '/todoist',
+        path: '/todoist/',
         name: 'Todoist',
-        component: TodoistIndexComponent
+        component: TodoistIndexComponent,
+    },
+    {
+        path: '/todoist/new/',
+        name: 'New Todoist',
+        component: NewTodoistComponent,
+    },
+    {
+        path: '/todoist/1/',
+        name: 'Existing Todoist',
+        component: TodoistComponent,
     },
 ]
 

@@ -120,6 +120,7 @@ export default {
 
             axios.post('/auth/login', loginRequestData).then((success) => {
                 this.$router.push('/todoist');
+                this.$router.go(0);
             }).catch((error) => {
                 console.log(error.response);
                 alert("Login Failed");
