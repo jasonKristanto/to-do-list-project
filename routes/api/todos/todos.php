@@ -15,3 +15,4 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('/', [TodoistController::class, 'index']);
+Route::post('/get-todoist', [TodoistController::class, 'getTodoist']);

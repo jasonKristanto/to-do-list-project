@@ -11,17 +11,17 @@ const routes = [
         component: AuthIndexComponent,
     },
     {
-        path: '/todoist/',
+        path: '/todoist',
         name: 'Todoist',
         component: TodoistIndexComponent,
     },
     {
-        path: '/todoist/new/',
+        path: '/todoist/new',
         name: 'New Todoist',
         component: NewTodoistComponent,
     },
     {
-        path: '/todoist/1/',
+        path: '/todoist/:id',
         name: 'Existing Todoist',
         component: TodoistComponent,
     },
