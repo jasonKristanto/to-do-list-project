@@ -8,10 +8,10 @@
         </v-app-bar>
 
         <v-content>
-            <v-card class="mx-auto" max-width="750" outlined>
+            <v-card class="mx-auto" max-width="750">
                 <v-card-title class="mb-5">
                     <v-text-field
-                        v-model="todoistTitle.title"
+                        v-model="todoistTitle"
                         label="Todoist Title"
                         hide-details="auto"
                     ></v-text-field>
@@ -19,20 +19,67 @@
 
                 <v-card-subtitle>
                     <v-text-field
-                        v-model="todoistTitle.description"
+                        v-model="todoistDesc"
                         label="Todoist Description"
                         hide-details="auto"
                     ></v-text-field>
                 </v-card-subtitle>
 
                 <v-card-text>
-                    <div v-for="todo in todoists" :key="todo.id">
-                        <v-checkbox
-                            v-model="todo.status"
-                            :label="todo.todos"
-                        ></v-checkbox>
+                    <div>
+                        <div v-for="(todo, index) in todoists" :key="index">
+                            <v-row>
+                                <v-col>
+                                    <v-checkbox v-model="todo.status" :label="todo.todos"></v-checkbox>
+                                </v-col>
+                                <v-col class="mr-2">
+                                    <v-text-field
+                                        v-model="todo.todos"
+                                        label="Edit Your Todos"
+                                    ></v-text-field>
+                                </v-col>
+                                <v-col cols="2">
+                                    <v-btn @click="removeTodos(index)" class="mx-2 mt-3" fab dark small color="red">
+                                        <v-icon dark>
+                                            mdi-minus
+                                        </v-icon>
+                                    </v-btn>
+                                </v-col>
+                            </v-row>
+                        </div>
                     </div>
+
+                    <v-row>
+                        <v-col cols="7">
+                            <v-text-field
+                                v-model="newTodoists"
+                                label="New Todos"
+                                hide-details="auto"
+                            ></v-text-field>
+                        </v-col>
+                        <v-col cols="4" class="py-auto mr-2">
+                            <v-btn @click="addTodos" color="brown lighten-5" class="mt-3 brown--text"
+                                   style="width: 100%;">
+                                Add Todos
+                            </v-btn>
+                        </v-col>
+                    </v-row>
                 </v-card-text>
+
+                <v-card-actions>
+                    <v-row>
+                        <v-col cols="12">
+                            <v-btn @click="update" color="white" class="brown--text" style="width: 100%;">
+                                Update This Todoist
+                            </v-btn>
+                        </v-col>
+                        <v-col cols="12">
+                            <v-btn @click="removeTodoist" color="white" class="red--text" style="width: 100%;">
+                                Remove This Todoist
+                            </v-btn>
+                        </v-col>
+                    </v-row>
+                </v-card-actions>
             </v-card>
         </v-content>
     </v-app>
@@ -53,7 +100,10 @@ export default {
     data() {
         return {
             todoistTitle: null,
+            todoistDesc: null,
+            todoistId: null,
             todoists: null,
+            newTodoists: '',
         }
     },
     mounted() {
@@ -75,12 +125,75 @@ export default {
 
             await axios.post('api/todos/get-todoist', data, config).then(response => {
                 console.log(response.data);
-                this.todoistTitle = response.data.data.todoists_title[0];
+                this.todoistTitle = response.data.data.todoists_title[0].title;
+                this.todoistDesc = response.data.data.todoists_title[0].description;
+                this.todoistId = response.data.data.todoists_title[0].title_id;
                 this.todoists = response.data.data.todoists;
             }).catch(error => {
                 console.log(error.response);
             });
-        }
+        },
+        update() {
+            console.log(this.todoistTitle)
+            console.log(this.todoistDesc)
+            console.log(this.todoists)
+            console.log(this.todoistId)
+
+            var config = {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+            };
+
+            var data = {
+                todoists: this.todoists,
+                todoistId: this.todoistId,
+                todoistTitle: this.todoistTitle,
+                todoistDesc: this.todoistDesc,
+            };
+
+            axios.post('api/todos/update-todoist', data, config).then(response => {
+                console.log(response.data);
+            }).catch(error => {
+                console.log(error.response);
+            });
+        },
+        addTodos() {
+            if (this.newTodoists.length > 1) {
+                this.todoists.push({
+                    todos: this.newTodoists,
+                    status: 0,
+                    info: 'new todos',
+                });
+                console.log(this.todoists);
+            }
+
+            this.newTodoists = '';
+        },
+        removeTodos(index) {
+            console.log(index)
+            this.todoists.splice(index, 1);
+        },
+        removeTodoist() {
+            var config = {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+            };
+
+            var data = {
+                id: this.todoistId,
+            };
+
+            axios.post('api/todos/remove-todoist', data, config).then(response => {
+                console.log(response.data);
+                this.goToHome();
+            }).catch(error => {
+                console.log(error.response);
+            });
+        },
     },
 }
 </script>

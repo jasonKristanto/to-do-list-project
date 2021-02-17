@@ -3,45 +3,38 @@
 namespace App\Http\Controllers\Todos;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Todos\GetTodoistRequest;
-use App\Repositories\Todos\Lists\TodoistRepositoryInterface;
-use App\Repositories\Todos\Title\TodoistTitleRepositoryInterface;
+use App\Http\Requests\Todos\TodoistIdRequest;
+use App\Http\Requests\Todos\UpdateTodoistRequest;
+use App\Services\Todos\GetTodoistService;
+use App\Services\Todos\GetTodoistTitleService;
+use App\Services\Todos\RemoveTodoistService;
+use App\Services\Todos\UpdateTodoistService;
 use App\Traits\Responser;
-use Illuminate\Support\Facades\Auth;
 
 class TodoistController extends Controller
 {
     use Responser;
 
-    private $todoistRepository, $todoistTitleController;
-
-    public function __construct()
-    {
-        $this->todoistRepository = app(TodoistRepositoryInterface::class);
-        $this->todoistTitleController = app(TodoistTitleRepositoryInterface::class);
-    }
-
     public function index()
     {
+        return $this->successResponse('Success', (new GetTodoistTitleService())->process());
+    }
+
+    public function getTodoist(TodoistIdRequest $request)
+    {
         return $this->successResponse('Success', [
-            'todoists_title' => $this->todoistTitleController->getByAttributes(['user_id' => Auth::id()]),
+            'todoists_title' => (new GetTodoistTitleService($request->id))->process(),
+            'todoists' => (new GetTodoistService($request->id))->process(),
         ]);
     }
 
-    public function getTodoist(GetTodoistRequest $request)
+    public function update(UpdateTodoistRequest $request)
     {
-        return $this->successResponse('Success', [
-            'todoists_title' => $this->todoistTitleController->getAttributesData(
-                [
-                    'user_id' => Auth::id(),
-                    'title_id' => $request->id
-                ],
-                ['title', 'description']
-            ),
-            'todoists' => $this->todoistRepository->getByAttributes([
-                'user_id' => Auth::id(),
-                'title_id' => $request->id
-            ]),
-        ]);
+        return $this->successResponse('Success', (new UpdateTodoistService($request->validated()))->process());
+    }
+
+    public function delete(TodoistIdRequest $request)
+    {
+        return $this->successResponse('Success', (new RemoveTodoistService($request->validated()))->process());
     }
 }

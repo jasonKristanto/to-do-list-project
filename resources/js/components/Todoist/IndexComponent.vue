@@ -64,8 +64,8 @@ export default {
             };
 
             await axios.post('api/todos/', config).then(response => {
-                console.log(response.data);
-                this.todoistsTitle = response.data.data.todoists_title;
+                console.log(response);
+                this.todoistsTitle = response.data.data;
 
                 console.log(this.todoistsTitle)
             }).catch(error => {

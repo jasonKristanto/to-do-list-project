@@ -5,7 +5,7 @@ namespace App\Http\Requests\Todos;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
-class GetTodoistRequest extends FormRequest
+class TodoistIdRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

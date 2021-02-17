@@ -16,3 +16,5 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/', [TodoistController::class, 'index']);
 Route::post('/get-todoist', [TodoistController::class, 'getTodoist']);
+Route::post('/update-todoist', [TodoistController::class, 'update']);
+Route::post('/remove-todoist', [TodoistController::class, 'delete']);
