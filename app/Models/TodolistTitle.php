@@ -12,7 +12,7 @@ class TodolistTitle extends Model
     protected $primaryKey = 'title_id';
 
     protected $fillable = [
-        'user_id', 'title'
+        'user_id', 'title', 'description'
     ];
 
     public function todolist()

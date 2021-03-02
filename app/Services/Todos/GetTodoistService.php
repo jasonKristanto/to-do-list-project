@@ -19,7 +19,7 @@ class GetTodoistService
     {
         return $this->todolistRepository->getAttributesData(
             ['user_id' => Auth::id(), 'title_id' => $this->titleId],
-            ['title_id', 'todos', 'status']
+            ['id', 'todos', 'status']
         );
     }
 }

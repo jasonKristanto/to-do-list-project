@@ -39,7 +39,7 @@
                                     ></v-text-field>
                                 </v-col>
                                 <v-col cols="2">
-                                    <v-btn @click="removeTodos(index)" class="mx-2 mt-3" fab dark small color="red">
+                                    <v-btn @click="removeTodos(index, todo)" class="mx-2 mt-3" fab dark small color="red">
                                         <v-icon dark>
                                             mdi-minus
                                         </v-icon>
@@ -104,6 +104,7 @@ export default {
             todoistId: null,
             todoists: null,
             newTodoists: '',
+            removedTodoists: [],
         }
     },
     mounted() {
@@ -147,14 +148,22 @@ export default {
             };
 
             var data = {
-                todoists: this.todoists,
                 todoistId: this.todoistId,
                 todoistTitle: this.todoistTitle,
-                todoistDesc: this.todoistDesc,
+                todoistDesc: this.todoistDesc.length > 0 ? this.todoistDesc : '-',
             };
+
+            if (this.removedTodoists.length > 0) {
+                data.removedTodoists = this.removedTodoists;
+            }
+
+            if (this.todoists.length > 0) {
+                data.todoists = this.todoists;
+            }
 
             axios.post('api/todos/update-todoist', data, config).then(response => {
                 console.log(response.data);
+                this.$router.go(0);
             }).catch(error => {
                 console.log(error.response);
             });
@@ -171,9 +180,13 @@ export default {
 
             this.newTodoists = '';
         },
-        removeTodos(index) {
+        removeTodos(index, todo) {
             console.log(index)
             this.todoists.splice(index, 1);
+            this.removedTodoists.push({
+                id: todo.id,
+                todos: todo.todos,
+            })
         },
         removeTodoist() {
             var config = {

@@ -31,6 +31,11 @@ abstract class BaseRepository implements BaseRepositoryInterface
         return $this->model->create($data);
     }
 
+    public function createAndGetId($data, $id)
+    {
+        return $this->model->create($data)->$id;
+    }
+
     public function insert($data)
     {
         return $this->model->insert($data);

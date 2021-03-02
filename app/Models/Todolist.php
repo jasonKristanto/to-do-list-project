@@ -10,7 +10,7 @@ class Todolist extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'title_id', 'todos'
+        'user_id', 'title_id', 'todos', 'status'
     ];
 
     public function todolistTitle()
