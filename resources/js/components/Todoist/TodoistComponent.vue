@@ -55,6 +55,7 @@
                                 v-model="newTodoists"
                                 label="New Todos"
                                 hide-details="auto"
+                                v-on:keyup.enter="addTodos"
                             ></v-text-field>
                         </v-col>
                         <v-col cols="4" class="py-auto mr-2">
@@ -69,7 +70,7 @@
                 <v-card-actions>
                     <v-row>
                         <v-col cols="12">
-                            <v-btn @click="update" color="white" class="brown--text" style="width: 100%;">
+                            <v-btn @click="updateTodoist" color="white" class="brown--text" style="width: 100%;">
                                 Update This Todoist
                             </v-btn>
                         </v-col>
@@ -107,67 +108,10 @@ export default {
             removedTodoists: [],
         }
     },
-    mounted() {
-        console.log(this.$route.params.id)
-        this.getTodoists();
+    created() {
+        this.getTodoist();
     },
     methods: {
-        async getTodoists() {
-            var config = {
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                },
-            };
-
-            var data = {
-                id: this.$route.params.id
-            };
-
-            await axios.post('api/todos/get-todoist', data, config).then(response => {
-                console.log(response.data);
-                this.todoistTitle = response.data.data.todoists_title[0].title;
-                this.todoistDesc = response.data.data.todoists_title[0].description;
-                this.todoistId = response.data.data.todoists_title[0].title_id;
-                this.todoists = response.data.data.todoists;
-            }).catch(error => {
-                console.log(error.response);
-            });
-        },
-        update() {
-            console.log(this.todoistTitle)
-            console.log(this.todoistDesc)
-            console.log(this.todoists)
-            console.log(this.todoistId)
-
-            var config = {
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                },
-            };
-
-            var data = {
-                todoistId: this.todoistId,
-                todoistTitle: this.todoistTitle,
-                todoistDesc: this.todoistDesc.length > 0 ? this.todoistDesc : '-',
-            };
-
-            if (this.removedTodoists.length > 0) {
-                data.removedTodoists = this.removedTodoists;
-            }
-
-            if (this.todoists.length > 0) {
-                data.todoists = this.todoists;
-            }
-
-            axios.post('api/todos/update-todoist', data, config).then(response => {
-                console.log(response.data);
-                this.$router.go(0);
-            }).catch(error => {
-                console.log(error.response);
-            });
-        },
         addTodos() {
             if (this.newTodoists.length > 1) {
                 this.todoists.push({
@@ -188,6 +132,42 @@ export default {
                 todos: todo.todos,
             })
         },
+        getTodoist() {
+            var data = {
+                id: this.$route.params.id
+            };
+
+            this.$store.dispatch('getTodoist', data).then((success) => {
+                this.todoistId = this.$store.state.todoists.id;
+                this.todoistTitle = this.$store.state.todoists.title;
+                this.todoistDesc = this.$store.state.todoists.desc;
+                this.todoists = this.$store.state.todoists.todos;
+            }).catch((error) => {
+                console.log(error);
+            })
+        },
+        updateTodoist() {
+            var data = {
+                todoistId: this.todoistId,
+                todoistTitle: this.todoistTitle,
+                todoistDesc: this.todoistDesc.length > 0 ? this.todoistDesc : '-',
+            };
+
+            if (this.removedTodoists.length > 0) {
+                data.removedTodoists = this.removedTodoists;
+            }
+
+            if (this.todoists.length > 0) {
+                data.todoists = this.todoists;
+            }
+
+            this.$store.dispatch('updateTodoist', data).then((success) => {
+                console.log(success.data);
+                alert('Update todoists successfully');
+            }).catch((error) => {
+                console.log(error);
+            });
+        },
         removeTodoist() {
             var config = {
                 headers: {
@@ -200,11 +180,11 @@ export default {
                 id: this.todoistId,
             };
 
-            axios.post('api/todos/remove-todoist', data, config).then(response => {
-                console.log(response.data);
+            this.$store.dispatch('removeTodoists', data).then((success) => {
+                console.log(success.data);
                 this.goToHome();
-            }).catch(error => {
-                console.log(error.response);
+            }).catch((error) => {
+                console.log(error);
             });
         },
     },
