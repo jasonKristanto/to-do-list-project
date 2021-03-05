@@ -84,9 +84,6 @@ extend('email', {
     message: 'Email must be valid',
 });
 
-const axios = require('axios');
-axios.defaults.headers.post['X-CSRF-Token'] = document.querySelector('meta[name="csrf-token"]').content;
-
 export default {
     name: "LoginComponent",
     components: {
@@ -113,16 +110,12 @@ export default {
             this.$refs.loginForm.reset();
         },
         login() {
-            const loginRequestData = {
+            this.$store.dispatch('login', {
                 email: this.email,
                 password: this.password
-            }
-
-            axios.post('/auth/login', loginRequestData).then((success) => {
+            }).then(response => {
                 this.$router.push('/todoist');
-                this.$router.go(0);
             }).catch((error) => {
-                console.log(error.response);
                 alert("Login Failed");
             });
         },
@@ -135,7 +128,7 @@ export default {
                         this.closeForm();
                     });
                 } else {
-                    alert('Username and/or Password is incorrect.')
+                    alert('Username and/or Password is incorrect.');
                 }
             });
         },

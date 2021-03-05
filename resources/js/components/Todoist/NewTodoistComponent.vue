@@ -55,6 +55,7 @@
                                 v-model="newTodoists"
                                 label="New Todos"
                                 hide-details="auto"
+                                v-on:keyup.enter="addTodos"
                             ></v-text-field>
                         </v-col>
                         <v-col cols="4" class="py-auto mr-2">
@@ -122,28 +123,18 @@ export default {
             console.log(this.todoists)
             console.log(this.todoistId)
 
-            var config = {
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                },
-            };
-
-            var data = {
+            var newTodoist = {
                 todoistId: this.todoistId,
                 todoistTitle: this.todoistTitle,
                 todoistDesc: this.todoistDesc.length > 0 ? this.todoistDesc : '-',
             };
 
             if (this.todoists.length > 0) {
-                data.todoists = this.todoists;
+                newTodoist.todoists = this.todoists;
             }
 
-            axios.post('api/todos/store-todoist', data, config).then(response => {
-                console.log(response.data);
+            this.$store.dispatch('createNewTodoist', newTodoist).then((success) => {
                 this.goToHome();
-            }).catch(error => {
-                console.log(error.response);
             });
         },
     },

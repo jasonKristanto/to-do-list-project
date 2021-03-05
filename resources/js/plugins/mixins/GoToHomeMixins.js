@@ -1,10 +1,9 @@
 const GoToHomeMixins = {
     methods: {
         goToHome() {
-            this.$router.push('/todoist');
-            this.$router.go(0);
+            this.$router.push('/todoist').catch(()=>{});
         }
     }
-}
+};
 
-export default GoToHomeMixins
+export default GoToHomeMixins;

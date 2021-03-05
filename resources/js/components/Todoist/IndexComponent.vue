@@ -10,7 +10,7 @@
         <v-container fluid>
             <v-row dense>
                 <v-col v-for="todoistTitle in todoistsTitle" :key="todoistTitle.title_id" cols="4">
-                    <v-card max-width="344">
+                    <v-card max-width="344" height="200">
                         <v-card-title>
                             {{ todoistTitle.title }}
                         </v-card-title>
@@ -39,42 +39,27 @@ import CreateNewMixin from "../../plugins/mixins/CreateNewMixins";
 import GoToHomeMixin from "../../plugins/mixins/GoToHomeMixins";
 import SeeExistingMixin from "../../plugins/mixins/SeeExistingMixins";
 
-const axios = require('axios');
-axios.defaults.headers.post['X-CSRF-Token'] = document.querySelector('meta[name="csrf-token"]').content;
-
 export default {
     name: "IndexComponent",
     mixins: [CreateNewMixin, GoToHomeMixin, LogoutMixin, SeeExistingMixin],
     data() {
         return {
             todoistsTitle: null,
-            show: false,
         };
     },
-    mounted() {
+    created() {
         this.getTodoist();
     },
     methods: {
-        async getTodoist() {
-            var config = {
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                },
-            };
-
-            await axios.post('api/todos/', config).then(response => {
-                console.log(response);
-                this.todoistsTitle = response.data.data;
-
-                console.log(this.todoistsTitle)
-            }).catch(error => {
+        getTodoist() {
+            this.$store.dispatch('getTodoistTitle').then((success) => {
+                this.todoistsTitle = this.$store.state.todoistsTitle;
+            }).catch((error) => {
                 console.log(error.response);
             });
         },
         getTodoistDetails(todoistTitleId) {
             this.$router.push({ name: 'Existing Todoist', params: { id: todoistTitleId } });
-            this.$router.go(0);
         },
     },
 }

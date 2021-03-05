@@ -14,7 +14,9 @@ class LoginController extends Controller
     public function index(UserLoginRequest $userLoginRequest)
     {
         if (Auth::guard('web')->attempt(['email' => $userLoginRequest->email, 'password' => $userLoginRequest->password])) {
-            return $this->successResponse('Login Successful');
+            return $this->successResponse('Login Successful', [
+                'token' => Auth::guard('web')->user()->createToken('login')->accessToken
+            ]);
         } else {
             return $this->errorResponse('Login Unsuccessful');
         }

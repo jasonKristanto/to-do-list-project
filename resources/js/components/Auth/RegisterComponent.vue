@@ -135,13 +135,11 @@ export default {
             this.$refs.registerForm.reset();
         },
         register() {
-            const registerRequestData = {
+            this.$store.dispatch('register', {
                 name: this.name,
                 email: this.email,
                 password: this.password,
-            };
-
-            axios.post('/auth/register', registerRequestData).then((success) => {
+            }).then(response => {
                 alert("Registration Success. Please go to login section");
             }).catch((error) => {
                 alert("Registration Failed");
